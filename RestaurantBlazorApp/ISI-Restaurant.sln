@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ISI-Restaurant.BlazorApp", "ISI-Restaurant.BlazorApp\ISI-Restaurant.BlazorApp.csproj", "{5E5CAAA8-B970-4791-8D9A-DB0DB1E5FB84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISI-Restaurant.HttpClient", "ISI-Restaurant.HttpClient\ISI-Restaurant.HttpClient.csproj", "{68023519-1E66-41A0-B4C9-E5D8396ACD25}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5E5CAAA8-B970-4791-8D9A-DB0DB1E5FB84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E5CAAA8-B970-4791-8D9A-DB0DB1E5FB84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E5CAAA8-B970-4791-8D9A-DB0DB1E5FB84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E5CAAA8-B970-4791-8D9A-DB0DB1E5FB84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68023519-1E66-41A0-B4C9-E5D8396ACD25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68023519-1E66-41A0-B4C9-E5D8396ACD25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68023519-1E66-41A0-B4C9-E5D8396ACD25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68023519-1E66-41A0-B4C9-E5D8396ACD25}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2F6238C0-BFB5-4E3E-A099-D65E2EC1305C}
+	EndGlobalSection
+EndGlobal
