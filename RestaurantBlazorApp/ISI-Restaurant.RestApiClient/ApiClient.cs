@@ -1,15 +1,16 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Net.Http;
 
-namespace ISI_Restaurant.HttpClient
+namespace ISI_Restaurant.RestApiClient
 {
-    public class APIClient
+    public class ApiClient : IApiClient
     {
         private readonly HttpClient httpClient;
         private readonly ILogger logger;
         private readonly Uri baseUri;
 
-        public APIClient(HttpClient httpClient, ILogger<APIClient> logger)
+        public ApiClient(HttpClient httpClient, ILogger<ApiClient> logger)
         {
             this.httpClient = httpClient;
             this.logger = logger;
