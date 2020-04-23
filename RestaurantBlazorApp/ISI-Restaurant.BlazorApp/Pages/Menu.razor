@@ -1,3 +1,63 @@
 ﻿@page "/menu"
 
+@using ISI_Restaurant.BlazorApp.Data
+@using ISI_Restaurant.Shared.Models
+@using ISI_Restaurant.BlazorApp.Components
+@using ISI_Restaurant.BlazorApp.Shared
+@inject FetchMenuService FetchMenuService
+
+
 <h1>Menu</h1>
+
+@if (menuItems == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="main">
+        <ul class="pizza-cards">
+            @foreach (var item in menuItems)
+            {
+                <li @onclick="@(() => ShowConfigDialog(item.Product))" style="background-image: url('@item.ImagePath')">
+                    <div class="pizza-info">
+                        <span class="title">@item.Product.Name</span>
+                        @item.Product.Description
+                        <span class="price">@item.Product.GetFormattedPrice()</span>
+                    </div>
+                </li>
+            }
+
+        </ul>
+    </div>
+}
+
+@if (dialogDisplayed)
+{
+    <ConfigureProductDialog Pizza="newPizza" />
+}
+
+
+@code
+{
+    private IEnumerable<MenuItem> menuItems;
+    Pizza newPizza;
+    bool dialogDisplayed = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        menuItems = await FetchMenuService.LoadDummyMenu();
+    }
+
+    void ShowConfigDialog(Product product)
+    {
+        newPizza = new Pizza()
+        {
+            Product = product,
+            Size = 40,
+            Toppings = new List<Topping>(),
+        };
+
+        dialogDisplayed = true;
+    }
+}

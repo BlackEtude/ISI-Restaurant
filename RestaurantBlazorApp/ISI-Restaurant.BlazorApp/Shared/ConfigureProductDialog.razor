@@ -1,0 +1,24 @@
+﻿@using ISI_Restaurant.Shared.Models
+
+
+<div class="dialog-container">
+    <div class="dialog">
+        <div class="dialog-title">
+            <h2>@Pizza.Product.Name</h2>
+            @Pizza.Product.Description
+        </div>
+        <form class="dialog-body"></form>
+        <div class="dialog-buttons">
+            <button class="btn btn-secondary mr-auto">Anuluj</button>
+            <span class="mr-center">
+                Cena: <span class="price">@(Pizza.GetFormattedTotalPrice())</span>
+            </span>
+            <button class="btn btn-success ml-auto">Dodaj ></button>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    [Parameter] public Pizza Pizza { get; set; }
+}

@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ISI-Restaurant.RestApiClient\ISI-Restaurant.RestApiClient.csproj" />
+    <ProjectReference Include="..\ISI-Restaurant.Shared\ISI-Restaurant.Shared.csproj" />
   </ItemGroup>
 
 </Project>
