@@ -4,8 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.edu.pwr.projects.RestaurantWebApplicationServer.ProductSize;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Builder
@@ -19,14 +22,13 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "order_id")
-    private Order order;
-
     @OneToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @Column(name = "count")
-    private int count;
+    @Column(name = "size")
+    private ProductSize productSize;
+
+    @ManyToMany
+    private Set<Topping> toppings = new HashSet<>();
 }

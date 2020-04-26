@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.edu.pwr.projects.RestaurantWebApplicationServer.PaymentStatus;
 
 import javax.persistence.*;
 
@@ -23,5 +24,5 @@ public class Payment {
     private Order order;
 
     @Column(name = "status")
-    private String status;
+    private PaymentStatus status;
 }

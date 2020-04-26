@@ -7,13 +7,13 @@ VALUES
     ('ul. Oleska 7', '50-215', 'Wrocław', 'Polska', '11:00', '22:00', '51.167702', '17.133708');
 
 INSERT INTO PRODUCTS
-    (description, name, price)
+    (description, name, price, photo_location)
 VALUES
-    ('sos pomidorowy, bazylia, ser', 'Pizza Minimal', '19.00'),
-    ('sos pomidorowy, pieczarki, ser', 'Pizza Chillout', '21.00'),
-    ('sos pomidorowy, szynka, ser', 'Pizza Pop', '22.00'),
-    ('sos pomidorowy, pieczarki, salami, ser', 'Pizza Salsa', '23.00'),
-    ('sos pomidorowy, pieczarki, ser, szynka', 'Pizza Classic', '23.00');
+    ('sos pomidorowy, bazylia, ser', 'Pizza Minimal', '19.00', 'img/pizzas/margherita.jpg'),
+    ('sos pomidorowy, pieczarki, ser', 'Pizza Chillout', '21.00', 'img/pizzas/mushroom.jpg'),
+    ('sos pomidorowy, szynka, ser', 'Pizza Pop', '22.00', 'img/pizzas/meaty.jpg'),
+    ('sos pomidorowy, pieczarki, salami, ser', 'Pizza Salsa', '23.00', 'img/pizzas/pepperoni.jpg'),
+    ('sos pomidorowy, pieczarki, ser, szynka', 'Pizza Classic', '23.00', 'img/pizzas/brit.jpg');
 
 INSERT INTO TOPPINGS
     (name, price)

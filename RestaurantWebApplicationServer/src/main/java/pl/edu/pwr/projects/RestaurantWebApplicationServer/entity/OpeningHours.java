@@ -15,9 +15,9 @@ import java.time.LocalTime;
 @Embeddable
 public class OpeningHours implements Serializable {
 
-    @Column(name="open_date_time")
+    @Column(name = "open_date_time")
     private LocalTime openingHour;
 
-    @Column(name="close_date_time")
+    @Column(name = "close_date_time")
     private LocalTime closingHour;
 }

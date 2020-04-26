@@ -4,8 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.edu.pwr.projects.RestaurantWebApplicationServer.DeliveryType;
+import pl.edu.pwr.projects.RestaurantWebApplicationServer.OrderStatus;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Data
 @Builder
@@ -25,8 +28,15 @@ public class Order {
     private double totalPrice;
 
     @Column(name = "delivery_type")
-    private String deliveryType;
+    private DeliveryType deliveryType;
 
     @Column(name = "status")
-    private String status;
+    private OrderStatus status;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    private Set<OrderItem> orderItems;
+
+    @OneToOne
+    @JoinColumn(name = "delivery_point_id")
+    private DeliveryPoint deliveryPoint;
 }

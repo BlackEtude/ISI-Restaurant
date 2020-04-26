@@ -3,10 +3,10 @@ package pl.edu.pwr.projects.RestaurantWebApplicationServer;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import pl.edu.pwr.projects.RestaurantWebApplicationServer.entity.*;
-import pl.edu.pwr.projects.RestaurantWebApplicationServer.repository.OrderItemRepository;
-import pl.edu.pwr.projects.RestaurantWebApplicationServer.repository.OrderRepository;
-import pl.edu.pwr.projects.RestaurantWebApplicationServer.repository.PaymentRepository;
-import pl.edu.pwr.projects.RestaurantWebApplicationServer.repository.ProductRepository;
+import pl.edu.pwr.projects.RestaurantWebApplicationServer.repository.*;
+
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class MockedDataLoader implements CommandLineRunner {
@@ -15,15 +15,21 @@ public class MockedDataLoader implements CommandLineRunner {
     private OrderItemRepository orderItemRepository;
     private PaymentRepository paymentRepository;
     private ProductRepository productRepository;
+    private ToppingRepository toppingRepository;
+    private DeliveryPointRepository deliveryPointRepository;
 
     public MockedDataLoader(OrderRepository orderRepository,
                             OrderItemRepository orderItemRepository,
                             PaymentRepository paymentRepository,
-                            ProductRepository productRepository) {
+                            ProductRepository productRepository,
+                            ToppingRepository toppingRepository,
+                            DeliveryPointRepository deliveryPointRepository) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.paymentRepository = paymentRepository;
         this.productRepository = productRepository;
+        this.toppingRepository = toppingRepository;
+        this.deliveryPointRepository = deliveryPointRepository;
     }
 
 
@@ -47,26 +53,42 @@ public class MockedDataLoader implements CommandLineRunner {
 
         Product product = productRepository.findById(1l).get();
 
-        Order order = Order.builder()
-                .customerData(customerData)
-                .deliveryType("odbiór własny")
-                .status("opłacone")
-                .totalPrice(26)
-                .build();
+        DeliveryPoint deliveryPoint = deliveryPointRepository.findById(1l).get();
+
+        Topping topping1 = toppingRepository.findById(1l).get();
+        Topping topping2 = toppingRepository.findById(2l).get();
+        Topping topping3 = toppingRepository.findById(3l).get();
 
         OrderItem orderItem = OrderItem.builder()
-                .order(order)
                 .product(product)
-                .count(1)
+                .productSize(ProductSize.MEDIUM)
+                .toppings(Stream.of(topping1, topping2, topping3).collect(Collectors.toSet()))
+                .build();
+
+        OrderItem orderItem2 = OrderItem.builder()
+                .product(product)
+                .productSize(ProductSize.SMALL)
+                .toppings(Stream.of(topping1, topping3).collect(Collectors.toSet()))
+                .build();
+
+        Order order = Order.builder()
+                .customerData(customerData)
+                .deliveryType(DeliveryType.PICKUP)
+                .status(OrderStatus.CREATED)
+                .totalPrice(26)
+                .orderItems(Stream.of(orderItem, orderItem2).collect(Collectors.toSet()))
+                .deliveryPoint(deliveryPoint)
                 .build();
 
         Payment payment = Payment.builder()
                 .order(order)
-                .status("COMPLETED")
+                .status(PaymentStatus.COMPLETED)
                 .build();
 
-        orderItemRepository.save(orderItem);
         orderRepository.save(order);
+        orderItemRepository.save(orderItem);
+        orderItemRepository.save(orderItem2);
+        deliveryPointRepository.save(deliveryPoint);
         paymentRepository.save(payment);
     }
 }
