@@ -16,16 +16,16 @@ import java.io.Serializable;
 @Embeddable
 public class CustomerData implements Serializable {
 
-    @Column(name="first_name")
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name="last_name")
+    @Column(name = "last_name")
     private String lastName;
 
-    @Column(name="email_address")
+    @Column(name = "email_address")
     private String emailAddress;
 
-    @Column(name="phone_number")
+    @Column(name = "phone_number")
     private String phoneNumber;
 
     private Address address;

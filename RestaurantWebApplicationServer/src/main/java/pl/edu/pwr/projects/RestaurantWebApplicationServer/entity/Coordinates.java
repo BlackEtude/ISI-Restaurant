@@ -13,9 +13,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Embeddable
 public class Coordinates implements Serializable {
-    @Column(name="latitude")
+    @Column(name = "latitude")
     private double latitude;
 
-    @Column(name="longitude")
+    @Column(name = "longitude")
     private double longitude;
 }

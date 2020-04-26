@@ -24,4 +24,7 @@ public class Product {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "photo_location")
+    private String photoLocation;
 }
