@@ -10,7 +10,7 @@
         <form class="dialog-body">
             <div>
                 <label>Rozmiar:</label>
-                <input type="range" min="@Pizza.MinimumSize" max="@Pizza.MaximumSize" step="10" @bind="Pizza.Size" @bind:event="oninput" />
+                <input type="range" min="@Product.MinimumSize" max="@Product.MaximumSize" step="10" @bind="Pizza.Size" @bind:event="oninput" />
                 <span class="size-label">
                     @(Pizza.Size)cm (@(Pizza.GetBasePrice())zł)
                 </span>
@@ -51,19 +51,22 @@
             </div>
         </form>
         <div class="dialog-buttons">
-            <button class="btn btn-secondary mr-auto">Anuluj</button>
+            <button class="btn btn-secondary mr-auto" @onclick="OnCancel">Anuluj</button>
             <span class="mr-center">
                 Cena: <span class="price">@(Pizza.GetFormattedTotalPrice())</span>
             </span>
-            <button class="btn btn-success ml-auto">Dodaj do koszyka ></button>
+            <button class="btn btn-success ml-auto" @onclick="OnConfirm">Dodaj do koszyka ></button>
         </div>
     </div>
 </div>
 
 
 @code {
+    [Parameter] public OrderItem Pizza { get; set; }
+    [Parameter] public EventCallback OnCancel { get; set; }
+    [Parameter] public EventCallback OnConfirm { get; set; }
+
     List<Topping> toppings;
-    [Parameter] public Pizza Pizza { get; set; }
 
     protected async override Task OnInitializedAsync()
     {

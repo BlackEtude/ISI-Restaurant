@@ -27,19 +27,48 @@ else
 
         </ul>
     </div>
+
+    <div class="sidebar">
+        @if (order.Items.Any())
+        {
+            <div class="order-contents">
+                <h2>Twoje zamówienie</h2>
+
+                @foreach (var pizza in order.Items)
+                {
+                    <ShoppingCart Pizza="pizza" OnRemoved="@(() => RemovePizzaFromTheCart(pizza))" />
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-cart">Twój koszyk<br>jest pusty</div>
+        }
+
+        <div class="order-total @(order.Items.Any() ? "" : "hidden")">
+            Koszt:
+            <span class="total-price"> @order.GetFormattedTotalPrice()</span>
+            <button class="btn btn-warning" disabled="@(order.Items.Count == 0)" @onclick="PlaceOrder">
+                Zamów >
+            </button>
+        </div>
+    </div>
 }
 
 @if (dialogDisplayed)
 {
-    <ConfigureProductDialog Pizza="newPizza" />
+    <ConfigureProductDialog Pizza="newPizza"
+                            OnCancel="CancelConfigDialog"
+                            OnConfirm="ConfirmConfigDialog" />
 }
 
 
 @code
 {
     private IEnumerable<MenuItem> menuItems;
-    Pizza newPizza;
+    OrderItem newPizza;
     bool dialogDisplayed = false;
+    Order order = new Order();
 
     protected override async Task OnInitializedAsync()
     {
@@ -48,7 +77,31 @@ else
 
     void ShowConfigDialog(Product product)
     {
-        newPizza = new Pizza(product);
+        newPizza = new OrderItem(product);
         dialogDisplayed = true;
+    }
+
+    void ConfirmConfigDialog()
+    {
+        order.Items.Add(newPizza);
+        newPizza = null;
+        dialogDisplayed = false;
+    }
+
+    void CancelConfigDialog()
+    {
+        newPizza = null;
+        dialogDisplayed = false;
+    }
+
+    void RemovePizzaFromTheCart(OrderItem pizza)
+    {
+        order.Items.Remove(pizza);
+    }
+
+    async Task PlaceOrder()
+    {
+        //await HttpClient.PostAsJsonAsync("orders", order);
+        order = new Order();
     }
 }

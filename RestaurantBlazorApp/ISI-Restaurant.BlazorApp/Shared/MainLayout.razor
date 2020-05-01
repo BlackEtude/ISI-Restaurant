@@ -1,11 +1,16 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="sidebar">
-    <NavMenu />
+<div class="top-bar">
+    <a class="logo" href="">
+        <img src="img/logo.png" />
+    </a>
+
+    <NavLink href="" class="nav-tab" Match="NavLinkMatch.All">
+        <img src="img/pizza-slice.svg" />
+        <div>Menu</div>
+    </NavLink>
 </div>
 
-<div class="main">
-    <div class="content px-4">
-        @Body
-    </div>
+<div class="content">
+    @Body
 </div>
