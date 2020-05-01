@@ -11,9 +11,7 @@ namespace ISI_Restaurant.Shared.Models
         [JsonProperty("toppings")]
         public List<Topping> Toppings { get; set; }
 
+        [JsonProperty("imagepath")]
         public string ImagePath { get; set; }
-        
-        [JsonProperty("image")]
-        public byte[] Image { get; set; }
     }
 }
