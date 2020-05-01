@@ -1,7 +1,107 @@
 ﻿@page "/"
 
-<h1>Hello, world!</h1>
+@using ISI_Restaurant.BlazorApp.Data
+@using ISI_Restaurant.Shared.Models
+@using ISI_Restaurant.BlazorApp.Shared
+@inject FetchMenuService FetchMenuService
 
-Welcome to your new app.
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@if (menuItems == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="main">
+        <ul class="pizza-cards">
+            @foreach (var item in menuItems)
+            {
+                <li @onclick="@(() => ShowConfigDialog(item.Product))" style="background-image: url('@item.ImagePath')">
+                    <div class="pizza-info">
+                        <span class="title">@item.Product.Name</span>
+                        @item.Product.Description
+                        <span class="price">@item.Product.GetFormattedPrice()</span>
+                    </div>
+                </li>
+            }
+
+        </ul>
+    </div>
+
+    <div class="sidebar">
+        @if (order.Items.Any())
+        {
+            <div class="order-contents">
+                <h2>Twoje zamówienie</h2>
+
+                @foreach (var pizza in order.Items)
+                {
+                    <ShoppingCart Pizza="pizza" OnRemoved="@(() => RemovePizzaFromTheCart(pizza))" />
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-cart">Twój koszyk<br>jest pusty</div>
+        }
+
+        <div class="order-total @(order.Items.Any() ? "" : "hidden")">
+            Koszt:
+            <span class="total-price"> @order.GetFormattedTotalPrice()</span>
+            <button class="btn btn-warning" disabled="@(order.Items.Count == 0)" @onclick="PlaceOrder">
+                Zamów >
+            </button>
+        </div>
+    </div>
+}
+
+@if (dialogDisplayed)
+{
+    <ConfigureProductDialog Pizza="newPizza"
+                            OnCancel="CancelConfigDialog"
+                            OnConfirm="ConfirmConfigDialog" />
+}
+
+
+@code
+{
+    private IEnumerable<MenuItem> menuItems;
+    OrderItem newPizza;
+    bool dialogDisplayed = false;
+    Order order = new Order();
+
+    protected override async Task OnInitializedAsync()
+    {
+        menuItems = await FetchMenuService.LoadDummyMenu();
+    }
+
+    void ShowConfigDialog(Product product)
+    {
+        newPizza = new OrderItem(product);
+        dialogDisplayed = true;
+    }
+
+    void ConfirmConfigDialog()
+    {
+        order.Items.Add(newPizza);
+        newPizza = null;
+        dialogDisplayed = false;
+    }
+
+    void CancelConfigDialog()
+    {
+        newPizza = null;
+        dialogDisplayed = false;
+    }
+
+    void RemovePizzaFromTheCart(OrderItem pizza)
+    {
+        order.Items.Remove(pizza);
+    }
+
+    async Task PlaceOrder()
+    {
+        //await HttpClient.PostAsJsonAsync("orders", order);
+        order = new Order();
+    }
+}

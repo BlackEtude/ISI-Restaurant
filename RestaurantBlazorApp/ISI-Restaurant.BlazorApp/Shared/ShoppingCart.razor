@@ -1,0 +1,20 @@
+﻿@using ISI_Restaurant.Shared.Models
+
+<div class="cart-item">
+    <a @onclick="OnRemoved" class="delete-item">x</a>
+    <div class="title">@Pizza.Product.Name (@(Pizza.Size)cm)</div>
+    <ul>
+        @foreach (var topping in Pizza.Toppings)
+        {
+            <li>+ @topping.Name</li>
+        }
+    </ul>
+    <div class="item-price">
+        @Pizza.GetFormattedTotalPrice()
+    </div>
+</div>
+
+@code {
+    [Parameter] public OrderItem Pizza { get; set; }
+    [Parameter] public EventCallback OnRemoved { get; set; }
+}

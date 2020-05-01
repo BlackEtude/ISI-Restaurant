@@ -7,18 +7,98 @@
             <h2>@Pizza.Product.Name</h2>
             @Pizza.Product.Description
         </div>
-        <form class="dialog-body"></form>
+        <form class="dialog-body">
+            <div>
+                <label>Rozmiar:</label>
+                <input type="range" min="@Product.MinimumSize" max="@Product.MaximumSize" step="10" @bind="Pizza.Size" @bind:event="oninput" />
+                <span class="size-label">
+                    @(Pizza.Size)cm (@(Pizza.GetBasePrice())zł)
+                </span>
+            </div>
+            <div>
+                <label>Dodatki:</label>
+                @if (toppings == null)
+                {
+                    <select class="custom-select" disabled>
+                        <option>(ładowanie...)</option>
+                    </select>
+                }
+                else if (Pizza.Toppings.Count >= 6)
+                {
+                    <div>(osiągnięto max)</div>
+                }
+                else
+                {
+                    <select class="custom-select" @onchange="ToppingSelected">
+                        <option value="-1" disabled selected>(wybierz)</option>
+                        @for (var i = 0; i < toppings.Count; i++)
+                        {
+                            <option value="@i">@toppings[i].Name (@(toppings[i].GetFormattedPrice())zł)</option>
+                        }
+                    </select>
+                }
+            </div>
+
+            <div class="toppings">
+                @foreach (var topping in Pizza.Toppings)
+                {
+                    <div class="topping">
+                        @topping.Name
+                        <span class="topping-price">(@topping.GetFormattedPrice()zł)</span>
+                        <button type="button" class="delete-topping" @onclick="@(() => RemoveTopping(topping))">x</button>
+                    </div>
+                }
+            </div>
+        </form>
         <div class="dialog-buttons">
-            <button class="btn btn-secondary mr-auto">Anuluj</button>
+            <button class="btn btn-secondary mr-auto" @onclick="OnCancel">Anuluj</button>
             <span class="mr-center">
                 Cena: <span class="price">@(Pizza.GetFormattedTotalPrice())</span>
             </span>
-            <button class="btn btn-success ml-auto">Dodaj ></button>
+            <button class="btn btn-success ml-auto" @onclick="OnConfirm">Dodaj do koszyka ></button>
         </div>
     </div>
 </div>
 
 
 @code {
-    [Parameter] public Pizza Pizza { get; set; }
+    [Parameter] public OrderItem Pizza { get; set; }
+    [Parameter] public EventCallback OnCancel { get; set; }
+    [Parameter] public EventCallback OnConfirm { get; set; }
+
+    List<Topping> toppings;
+
+    protected async override Task OnInitializedAsync()
+    {
+        toppings = new List<Topping>()
+            {
+                new Topping() { Id = 1, Name = "szynka", Price = 3.0M },
+                new Topping() { Id = 2, Name = "boczek", Price = 3.0M },
+                new Topping() { Id = 3, Name = "owoce morza", Price = 10.0M },
+                new Topping() { Id = 4, Name = "tuńczyk", Price = 3.0M },
+                new Topping() { Id = 5, Name = "ananas", Price = 2.0M },
+                new Topping() { Id = 6, Name = "cebula", Price = 2.0M },
+                new Topping() { Id = 7, Name = "kukurydza", Price = 2.0M },
+                new Topping() { Id = 8, Name = "papryka", Price = 2.0M },
+            };
+    }
+
+    void ToppingSelected(ChangeEventArgs e)
+    {
+        if (int.TryParse((string)e.Value, out var index) && index >= 0)
+        {
+            AddTopping(toppings[index]);
+        }
+    }
+
+    void AddTopping(Topping topping)
+    {
+        if (Pizza.Toppings.Find(pt => pt == topping) == null)
+        {
+            Pizza.Toppings.Add(topping);
+        }
+    }
+
+    void RemoveTopping(Topping topping)
+        => Pizza.Toppings.RemoveAll(pt => pt == topping);
 }

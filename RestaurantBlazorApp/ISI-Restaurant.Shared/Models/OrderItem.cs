@@ -1,19 +1,21 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace ISI_Restaurant.Shared.Models
 {
     public partial class OrderItem
     {
-        [JsonProperty("id")]
-        public long Id { get; set; }
+        public OrderItem(Product product)
+            => (Product, Size, Toppings) = (product, Product.DefaultSize, new List<Topping>());
 
-        [JsonProperty("order")]
-        public Order Order { get; set; }
+        public decimal BasePrice => Product.Price;
 
-        [JsonProperty("product")]
-        public Product product { get; set; }
+        public int GetBasePrice() => (int)((decimal)Size / Product.DefaultSize * Product.Price);
 
-        [JsonProperty("count")]
-        public int Count { get; set; }
+        public decimal GetTotalPrice() => GetBasePrice() + Toppings.Sum(t => t.Price);
+
+        public string GetFormattedTotalPrice() => GetTotalPrice().ToString("00.00");
+
+        public string GetFormattedBasePrice() => GetBasePrice().ToString("00.00");
     }
 }
