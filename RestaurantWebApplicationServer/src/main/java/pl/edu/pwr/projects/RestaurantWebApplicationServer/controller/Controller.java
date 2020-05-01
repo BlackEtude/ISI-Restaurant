@@ -28,7 +28,6 @@ public class Controller {
         this.toppingService = toppingService;
     }
 
-
     @GetMapping("/product")
     List<Product> getAllProducts() {
         return productService.getAllProducts();
