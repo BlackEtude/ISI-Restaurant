@@ -8,7 +8,7 @@ namespace ISI_Restaurant.Shared.Models
         public long Id { get; set; }
 
         [JsonProperty("price")]
-        public double Price { get; set; }
+        public decimal Price { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }

@@ -421,7 +421,7 @@ app {
 }
 
 .dialog-body .size-label {
-    min-width: 110px;
+    min-width: 140px;
     text-align: right;
 }
 
@@ -445,10 +445,6 @@ app {
     font-weight: 100;
     font-size: 0.8rem;
 }
-
-    .dialog .topping-price::after {
-        content: 'zł';
-    }
 
 .delete-topping {
     background: none;
