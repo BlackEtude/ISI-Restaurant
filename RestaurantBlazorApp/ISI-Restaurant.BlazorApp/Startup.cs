@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using ISI_Restaurant.BlazorApp.Data;
+using ISI_Restaurant.RestApiClient;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
@@ -17,6 +21,8 @@ namespace ISI_Restaurant.BlazorApp
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("en-US");
         }
 
         public IConfiguration Configuration { get; }
@@ -27,7 +33,9 @@ namespace ISI_Restaurant.BlazorApp
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            //services.AddSingleton<WeatherForecastService>();
+            services.AddSingleton<ApiClientConfiguration>();
+            services.AddScoped<FetchMenuService>();
+            services.AddHttpClient<IApiClient, ApiClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
