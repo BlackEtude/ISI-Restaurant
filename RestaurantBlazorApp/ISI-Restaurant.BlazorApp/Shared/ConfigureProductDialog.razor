@@ -1,4 +1,7 @@
 ﻿@using ISI_Restaurant.Shared.Models
+@using ISI_Restaurant.BlazorApp.Data
+
+@inject FetchDataService FetchDataService
 
 
 <div class="dialog-container">
@@ -66,21 +69,11 @@
     [Parameter] public EventCallback OnCancel { get; set; }
     [Parameter] public EventCallback OnConfirm { get; set; }
 
-    List<Topping> toppings;
+    private List<Topping> toppings;
 
     protected async override Task OnInitializedAsync()
     {
-        toppings = new List<Topping>()
-            {
-                new Topping() { Id = 1, Name = "szynka", Price = 3.0M },
-                new Topping() { Id = 2, Name = "boczek", Price = 3.0M },
-                new Topping() { Id = 3, Name = "owoce morza", Price = 10.0M },
-                new Topping() { Id = 4, Name = "tuńczyk", Price = 3.0M },
-                new Topping() { Id = 5, Name = "ananas", Price = 2.0M },
-                new Topping() { Id = 6, Name = "cebula", Price = 2.0M },
-                new Topping() { Id = 7, Name = "kukurydza", Price = 2.0M },
-                new Topping() { Id = 8, Name = "papryka", Price = 2.0M },
-            };
+        toppings = (await FetchDataService.GetToppings()).ToList();
     }
 
     void ToppingSelected(ChangeEventArgs e)

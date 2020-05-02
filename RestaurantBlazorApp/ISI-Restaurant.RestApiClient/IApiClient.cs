@@ -1,10 +1,13 @@
-﻿using System;
+﻿using ISI_Restaurant.Shared;
+using ISI_Restaurant.Shared.Models;
 using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace ISI_Restaurant.RestApiClient
 {
     public interface IApiClient
     {
+        Task<RequestResult<IEnumerable<Product>>> GetProducts();
+        Task<RequestResult<IEnumerable<Topping>>> GetToppings();
     }
 }

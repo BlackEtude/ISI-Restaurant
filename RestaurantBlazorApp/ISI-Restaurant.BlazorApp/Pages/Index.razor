@@ -3,7 +3,7 @@
 @using ISI_Restaurant.BlazorApp.Data
 @using ISI_Restaurant.Shared.Models
 @using ISI_Restaurant.BlazorApp.Shared
-@inject FetchMenuService FetchMenuService
+@inject FetchDataService FetchDataService
 
 
 @if (menuItems == null)
@@ -16,11 +16,11 @@ else
         <ul class="pizza-cards">
             @foreach (var item in menuItems)
             {
-                <li @onclick="@(() => ShowConfigDialog(item.Product))" style="background-image: url('@item.ImagePath')">
+                <li @onclick="@(() => ShowConfigDialog(item))" style="background-image: url('@item.PhotoLocation')">
                     <div class="pizza-info">
-                        <span class="title">@item.Product.Name</span>
-                        @item.Product.Description
-                        <span class="price">@item.Product.GetFormattedPrice()</span>
+                        <span class="title">@item.Name</span>
+                        @item.Description
+                        <span class="price">@item.GetFormattedPrice()</span>
                     </div>
                 </li>
             }
@@ -65,14 +65,14 @@ else
 
 @code
 {
-    private IEnumerable<MenuItem> menuItems;
+    private IEnumerable<Product> menuItems;
     OrderItem newPizza;
     bool dialogDisplayed = false;
     Order order = new Order();
 
     protected override async Task OnInitializedAsync()
     {
-        menuItems = await FetchMenuService.LoadDummyMenu();
+        menuItems = await FetchDataService.LoadMenu();
     }
 
     void ShowConfigDialog(Product product)

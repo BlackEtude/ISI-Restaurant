@@ -16,6 +16,9 @@ namespace ISI_Restaurant.Shared.Models
         [JsonProperty("description")]
         public string Description { get; set; }
 
-        public string GetFormattedPrice() => Price.ToString("0.00");
+        [JsonProperty("photoLocation")]
+        public string PhotoLocation { get; set; }
+
+        public string GetFormattedPrice() => Price.ToString("0.00");      
     }
 }

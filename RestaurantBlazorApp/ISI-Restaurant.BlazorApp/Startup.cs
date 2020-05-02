@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ISI_Restaurant.BlazorApp.Data;
 using ISI_Restaurant.RestApiClient;
+using ISI_Restaurant.RestApiClient.OAuth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
@@ -34,7 +35,8 @@ namespace ISI_Restaurant.BlazorApp
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<ApiClientConfiguration>();
-            services.AddScoped<FetchMenuService>();
+            services.AddSingleton<AuthorizationAuthority>();
+            services.AddScoped<FetchDataService>();
             services.AddHttpClient<IApiClient, ApiClient>();
         }
 
