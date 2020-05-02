@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  frontend:
+    build: './RestaurantBlazorApp'
+    ports:
+        - "8000:80"
+  backend:
+    build: './RestaurantWebApplicationServer'
+    ports:
+      - "8080:8080"
