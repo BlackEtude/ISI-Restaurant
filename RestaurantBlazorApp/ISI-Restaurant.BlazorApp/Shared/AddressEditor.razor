@@ -1,0 +1,61 @@
+﻿@using ISI_Restaurant.Shared.Models 
+
+<div class="form-field">
+    <label>Imię:</label>
+    <div>
+        <InputText @bind-Value="CustomerData.FirstName" />
+        <ValidationMessage For="@(() => CustomerData.FirstName)" />
+    </div>
+</div>
+
+<div class="form-field">
+    <label>Nazwisko:</label>
+    <div>
+        <InputText @bind-Value="CustomerData.LastName" />
+        <ValidationMessage For="@(() => CustomerData.LastName)" />
+    </div>
+</div>
+
+<div class="form-field">
+    <label>Telefon:</label>
+    <div>
+        <InputText @bind-Value="CustomerData.PhoneNumber" />
+        <ValidationMessage For="@(() => CustomerData.PhoneNumber)" />
+    </div>
+</div>
+
+<div class="form-field">
+    <label>Email:</label>
+    <div>
+        <InputText @bind-Value="CustomerData.EmailAddress" />
+        <ValidationMessage For="@(() => CustomerData.EmailAddress)" />
+    </div>
+</div>
+
+<div class="form-field">
+    <label>Ulica:</label>
+    <div>
+        <InputText @bind-Value="CustomerData.Address.Street" />
+        <ValidationMessage For="@(() => CustomerData.Address.Street)" />
+    </div>
+</div>
+
+<div class="form-field">
+    <label>Miasto:</label>
+    <div>
+        <InputText @bind-Value="CustomerData.Address.City" />
+        <ValidationMessage For="@(() => CustomerData.Address.City)" />
+    </div>
+</div>
+
+<div class="form-field">
+    <label>Kod pocztowy:</label>
+    <div>
+        <InputText @bind-Value="CustomerData.Address.PostalCode" />
+        <ValidationMessage For="@(() => CustomerData.Address.PostalCode)" />
+    </div>
+</div>
+
+@code {
+    [Parameter] public CustomerData CustomerData { get; set; }
+}

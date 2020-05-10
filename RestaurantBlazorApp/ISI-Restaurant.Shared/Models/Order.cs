@@ -8,10 +8,14 @@ namespace ISI_Restaurant.Shared.Models
         public Order()
         {
             Items = new List<OrderItem>();
+            CustomerData = new CustomerData();
+            DeliveryPoint = new DeliveryPoint();
         }
 
-        public decimal GetTotalPrice() => Items.Sum(p => p.GetTotalPrice());
+        public decimal GetCalculatedPrice() => Items.Sum(p => p.GetTotalPrice());
 
-        public string GetFormattedTotalPrice() => GetTotalPrice().ToString("0.00");
+        public string GetFormattedCalculatedPrice() => GetCalculatedPrice().ToString("0.00");
+
+        public string GetFormattedTotalPrice() => TotalPrice.ToString("0.00");
     }
 }

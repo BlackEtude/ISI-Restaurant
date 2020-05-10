@@ -11,11 +11,11 @@ namespace ISI_Restaurant.Shared.Models
         [JsonProperty("product")]
         public Product Product { get; set; }
 
-        [JsonProperty("count")]
-        public int Count { get; set; }
-
         [JsonProperty("size")]
         public int Size { get; set; }
+
+        [JsonProperty("productSize")]
+        public string ProductSize { get; set; }
 
         [JsonProperty("toppings")]
         public List<Topping> Toppings { get; set; }

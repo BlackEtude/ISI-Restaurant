@@ -1,0 +1,33 @@
+﻿@using ISI_Restaurant.Shared.Models
+
+@foreach (var item in Order.Items)
+{
+    <p>
+        <strong>
+            @item.Product.Name
+            (rozmiar @(item.ProductSize))
+            - @item.GetFormattedTotalPrice() zł
+        </strong>
+    </p>
+
+    <ul>
+        @foreach (var topping in item.Toppings)
+        {
+            <li>+ @topping.Name</li>
+        }
+    </ul>
+}
+
+<br/>
+<br/>
+
+<p>
+    <strong>
+        Koszt całkowity:
+        @Order.GetFormattedCalculatedPrice() zł
+    </strong>
+</p>
+
+@code {
+    [Parameter] public Order Order { get; set; }
+}

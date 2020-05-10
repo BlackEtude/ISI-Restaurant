@@ -1,19 +1,23 @@
 ﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace ISI_Restaurant.Shared.Models
 {
     public partial class Address
     {
-        [JsonProperty("address_street")]
+        [JsonProperty("street")]
+        [Required]
         public string Street { get; set; }
 
-        [JsonProperty("address_city")]
+        [JsonProperty("city")]
+        [Required]
         public string City { get; set; }
 
-        [JsonProperty("address_postal_code")]
+        [JsonProperty("postalCode")]
+        [Required]
         public string PostalCode { get; set; }
 
-        [JsonProperty("address_country")]
+        [JsonProperty("country")]
         public string Country { get; set; }
     }
 }

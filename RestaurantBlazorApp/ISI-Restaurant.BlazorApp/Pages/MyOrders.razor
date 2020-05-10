@@ -1,0 +1,40 @@
+﻿@page "/myorders"
+
+@using ISI_Restaurant.BlazorApp.Data
+@using ISI_Restaurant.Shared.Models
+@using ISI_Restaurant.BlazorApp.Shared
+@inject OrderService OrderService
+
+<div class="main">
+    @if (order == null)
+    {
+        <text>Loading...</text>
+    }
+    else
+    {
+        <div class="track-order">
+            <div class="track-order-title">
+                <h2>
+                    Zamówienie złożone @DateTime.Now.ToShortDateString()
+                </h2>
+                <p class="ml-auto mb-0">
+                    Status: <strong>@order.Status</strong>
+                </p>
+            </div>
+            <div class="track-order-body">
+                <div class="track-order-details">
+                    <OrderReview Order="order" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private Order order;
+
+    protected override async Task OnInitializedAsync()
+    {
+        order = await OrderService.LoadOrder();
+    }
+}

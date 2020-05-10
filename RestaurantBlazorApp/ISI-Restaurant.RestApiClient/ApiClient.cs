@@ -79,6 +79,25 @@ namespace ISI_Restaurant.RestApiClient
         public async Task<RequestResult<IEnumerable<Topping>>> GetToppings() 
             => await Get<IEnumerable<Topping>>(relativeUri: "topping");
 
+        public async Task<RequestResult<Order>> GetOrder(int id)
+            => await Get<Order>(relativeUri: Path.Combine("order", id.ToString()));
+
+        public async Task<int> SendNewOrder(Order order)
+        {
+            var uri = new Uri(baseUri, "order");
+
+            await SetBearer();
+
+            order.DeliveryPoint.Id = 1;         // temporarly fix the delivery point data
+
+            var httpResponse = await httpClient.PostAsJsonAsync(uri, order);
+            var responseStream = await httpResponse.Content.ReadAsStreamAsync();
+            //var newOrderId = await response.Content.ReadAsStringAsync();
+            TryDeserialize<Order>(responseStream, out var orderReceived);
+
+            return (int)orderReceived.Id;
+        }
+
         public static bool TryDeserialize<T>(Stream stream, out T obj)
         {
             try
@@ -98,5 +117,6 @@ namespace ISI_Restaurant.RestApiClient
                 return false;
             }
         }
+
     }
 }

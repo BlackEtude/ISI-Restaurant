@@ -1,19 +1,24 @@
 ﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace ISI_Restaurant.Shared.Models
 {
     public partial class CustomerData
     {
-        [JsonProperty("first_name")]
+        [JsonProperty("firstName")]
+        [Required]
         public string FirstName { get; set; }
 
-        [JsonProperty("last_name")]
+        [JsonProperty("lastName")]
+        [Required]
         public string LastName { get; set; }
 
-        [JsonProperty("email_address")]
+        [JsonProperty("emailAddress")]
+        [Required]
         public string EmailAddress { get; set; }
 
-        [JsonProperty("phone_number")]
+        [JsonProperty("phoneNumber")]
+        [Required]
         public string PhoneNumber { get; set; }
 
         [JsonProperty("address")]

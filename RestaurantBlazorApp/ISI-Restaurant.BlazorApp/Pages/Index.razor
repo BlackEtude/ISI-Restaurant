@@ -3,6 +3,7 @@
 @using ISI_Restaurant.BlazorApp.Data
 @using ISI_Restaurant.Shared.Models
 @using ISI_Restaurant.BlazorApp.Shared
+@inject OrderState OrderState
 @inject FetchDataService FetchDataService
 
 
@@ -16,7 +17,7 @@ else
         <ul class="pizza-cards">
             @foreach (var item in menuItems)
             {
-                <li @onclick="@(() => ShowConfigDialog(item))" style="background-image: url('@item.PhotoLocation')">
+                <li @onclick="@(() => OrderState.ShowConfigurePizzaDialog(item))" style="background-image: url('@item.PhotoLocation')">
                     <div class="pizza-info">
                         <span class="title">@item.Name</span>
                         @item.Description
@@ -29,14 +30,14 @@ else
     </div>
 
     <div class="sidebar">
-        @if (order.Items.Any())
+        @if (Order.Items.Any())
         {
             <div class="order-contents">
                 <h2>Twoje zamówienie</h2>
 
-                @foreach (var pizza in order.Items)
+                @foreach (var pizza in Order.Items)
                 {
-                    <ShoppingCart Pizza="pizza" OnRemoved="@(() => RemovePizzaFromTheCart(pizza))" />
+                    <ShoppingCart Pizza="pizza" OnRemoved="@(() => OrderState.RemoveConfiguredPizza(pizza))" />
                 }
             </div>
         }
@@ -45,63 +46,31 @@ else
             <div class="empty-cart">Twój koszyk<br>jest pusty</div>
         }
 
-        <div class="order-total @(order.Items.Any() ? "" : "hidden")">
+        <div class="order-total @(Order.Items.Any() ? "" : "hidden")">
             Koszt:
-            <span class="total-price"> @order.GetFormattedTotalPrice()</span>
-            <button class="btn btn-warning" disabled="@(order.Items.Count == 0)" @onclick="PlaceOrder">
+            <span class="total-price"> @Order.GetFormattedCalculatedPrice()</span>
+            <a href="checkout" class="@(Order.Items.Count == 0 ? "btn btn-warning disabled" : "btn btn-warning")">
                 Zamów >
-            </button>
+            </a>
         </div>
     </div>
 }
 
-@if (dialogDisplayed)
+@if (OrderState.ShowingConfigureDialog)
 {
-    <ConfigureProductDialog Pizza="newPizza"
-                            OnCancel="CancelConfigDialog"
-                            OnConfirm="ConfirmConfigDialog" />
+    <ConfigureProductDialog Pizza="OrderState.Pizza"
+        OnCancel="OrderState.CancelConfigurePizzaDialog"
+        OnConfirm="OrderState.ConfirmConfigurePizzaDialog" />
 }
 
 
 @code
 {
     private IEnumerable<Product> menuItems;
-    OrderItem newPizza;
-    bool dialogDisplayed = false;
-    Order order = new Order();
+    Order Order => OrderState.Order;
 
     protected override async Task OnInitializedAsync()
     {
         menuItems = await FetchDataService.LoadMenu();
-    }
-
-    void ShowConfigDialog(Product product)
-    {
-        newPizza = new OrderItem(product);
-        dialogDisplayed = true;
-    }
-
-    void ConfirmConfigDialog()
-    {
-        order.Items.Add(newPizza);
-        newPizza = null;
-        dialogDisplayed = false;
-    }
-
-    void CancelConfigDialog()
-    {
-        newPizza = null;
-        dialogDisplayed = false;
-    }
-
-    void RemovePizzaFromTheCart(OrderItem pizza)
-    {
-        order.Items.Remove(pizza);
-    }
-
-    async Task PlaceOrder()
-    {
-        //await HttpClient.PostAsJsonAsync("orders", order);
-        order = new Order();
     }
 }

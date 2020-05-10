@@ -8,19 +8,22 @@ namespace ISI_Restaurant.Shared.Models
         [JsonProperty("id")]
         public long Id { get; set; }
 
-        [JsonProperty("customer_data")]
+        [JsonProperty("customerData")]
         public CustomerData CustomerData { get; set; }
 
-        [JsonProperty("total_price")]
-        public double Totalprice { get; set; }
+        [JsonProperty("totalPrice")]
+        public double TotalPrice { get; set; }
 
-        [JsonProperty("delivery_type")]
+        [JsonProperty("deliveryType")]
         public string DeliveryType { get; set; }
 
         [JsonProperty("status")]
         public string Status { get; set; }
 
-        [JsonProperty("items")]
+        [JsonProperty("orderItems")]
         public List<OrderItem> Items { get; set; }
+
+        [JsonProperty("deliveryPoint")]
+        public DeliveryPoint DeliveryPoint { get; set; }
     }
 }

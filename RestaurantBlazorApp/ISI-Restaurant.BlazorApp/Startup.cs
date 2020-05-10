@@ -37,6 +37,8 @@ namespace ISI_Restaurant.BlazorApp
             services.AddSingleton<ApiClientConfiguration>();
             services.AddSingleton<AuthorizationAuthority>();
             services.AddScoped<FetchDataService>();
+            services.AddScoped<OrderState>();
+            services.AddScoped<OrderService>();
             services.AddHttpClient<IApiClient, ApiClient>();
         }
 
