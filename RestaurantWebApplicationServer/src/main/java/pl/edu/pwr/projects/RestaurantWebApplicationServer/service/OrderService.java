@@ -3,6 +3,7 @@ package pl.edu.pwr.projects.RestaurantWebApplicationServer.service;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import pl.edu.pwr.projects.RestaurantWebApplicationServer.DeliveryType;
 import pl.edu.pwr.projects.RestaurantWebApplicationServer.entity.DeliveryPoint;
 import pl.edu.pwr.projects.RestaurantWebApplicationServer.entity.Order;
 import pl.edu.pwr.projects.RestaurantWebApplicationServer.entity.Product;
@@ -10,6 +11,8 @@ import pl.edu.pwr.projects.RestaurantWebApplicationServer.entity.Topping;
 import pl.edu.pwr.projects.RestaurantWebApplicationServer.exception.OrderNotFoundException;
 import pl.edu.pwr.projects.RestaurantWebApplicationServer.repository.OrderRepository;
 
+import javax.xml.crypto.Data;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -48,9 +51,15 @@ public class OrderService {
             orderItem.setToppings(toppings);
         });
 
-        long deliveryPointId = order.getDeliveryPoint().getId();
-        DeliveryPoint deliveryPoint = deliveryPointService.getDeliveryPointById(deliveryPointId);
-        order.setDeliveryPoint(deliveryPoint);
+        order.setDeliveryType(order.getDeliveryType());
+
+        if(order.getDeliveryType().equals(DeliveryType.PICKUP)) {
+            long deliveryPointId = order.getDeliveryPoint().getId();
+            DeliveryPoint deliveryPoint = deliveryPointService.getDeliveryPointById(deliveryPointId);
+            order.setDeliveryPoint(deliveryPoint);
+        }
+
+        order.setDate(LocalDateTime.now());
 
         return orderRepository.save(order);
     }

@@ -8,6 +8,8 @@ import pl.edu.pwr.projects.RestaurantWebApplicationServer.DeliveryType;
 import pl.edu.pwr.projects.RestaurantWebApplicationServer.OrderStatus;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Set;
 
 @Data
@@ -32,6 +34,9 @@ public class Order {
 
     @Column(name = "status")
     private OrderStatus status;
+
+    @Column(name = "order_date")
+    private LocalDateTime date;
 
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<OrderItem> orderItems;
