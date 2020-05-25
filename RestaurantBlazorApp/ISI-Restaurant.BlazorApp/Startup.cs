@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ISI_Restaurant.BlazorApp.Data;
+using ISI_Restaurant.PaymentClient;
 using ISI_Restaurant.RestApiClient;
 using ISI_Restaurant.RestApiClient.OAuth;
 using Microsoft.AspNetCore.Builder;
@@ -39,6 +40,7 @@ namespace ISI_Restaurant.BlazorApp
             services.AddScoped<FetchDataService>();
             services.AddScoped<OrderState>();
             services.AddScoped<OrderService>();
+            services.AddHttpClient<IPayUClient, PayUClient>();
             services.AddHttpClient<IApiClient, ApiClient>();
         }
 
