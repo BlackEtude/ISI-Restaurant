@@ -1,0 +1,33 @@
+﻿@using ISI_Restaurant.Shared.Models
+@using ISI_Restaurant.BlazorApp.Data
+
+@inject OrderService OrderService
+
+<div id="map-image">
+    @if (ShowMap)
+    {
+        <img src="@BuildMapUrl()" alt="Map Alternate Text" />
+    }
+</div>
+
+
+@code {
+    [Parameter] public bool ShowMap { get; set; }
+
+    private IEnumerable<DeliveryPoint> deliveryPoints;
+    private static string baseUrl => "https://maps.googleapis.com/maps/api/staticmap?size=600x300&maptype=roadmap";
+    private static string apiKey => "AIzaSyDedvqQg5xAuvbsAahKkNNkkDsyqMQFuyo";
+
+    protected override async Task OnInitializedAsync()
+    {
+        deliveryPoints = await OrderService.GetDeliveryPoints();
+    }
+
+    private string BuildMapUrl()
+    {
+        var i = 0;
+        var markers = String.Concat(deliveryPoints.Select(d => $"&markers=label:{i++}%7C{d.Coordinates.Latitude},{d.Coordinates.Longitude}"));
+        var url = $@"{baseUrl}{markers}&key={apiKey}";
+        return url;
+    }
+}

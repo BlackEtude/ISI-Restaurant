@@ -10,6 +10,7 @@ namespace ISI_Restaurant.RestApiClient
         Task<RequestResult<IEnumerable<Product>>> GetProducts();
         Task<RequestResult<IEnumerable<Topping>>> GetToppings();
         Task<RequestResult<Order>> GetOrder(int id);
+        Task<RequestResult<IEnumerable<DeliveryPoint>>> GetDeliveryPoints();
         Task<int> SendNewOrder(Order order);
     }
 }

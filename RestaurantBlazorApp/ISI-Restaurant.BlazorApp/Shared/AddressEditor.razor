@@ -1,61 +1,78 @@
-﻿@using ISI_Restaurant.Shared.Models 
+﻿@using ISI_Restaurant.Shared.Models
 
 <div class="form-field">
     <label>Imię:</label>
     <div>
-        <InputText @bind-Value="CustomerData.FirstName" />
-        <ValidationMessage For="@(() => CustomerData.FirstName)" />
+        <InputText @bind-Value="Order.CustomerData.FirstName" />
+        <ValidationMessage For="@(() => Order.CustomerData.FirstName)" />
     </div>
 </div>
 
 <div class="form-field">
     <label>Nazwisko:</label>
     <div>
-        <InputText @bind-Value="CustomerData.LastName" />
-        <ValidationMessage For="@(() => CustomerData.LastName)" />
+        <InputText @bind-Value="Order.CustomerData.LastName" />
+        <ValidationMessage For="@(() => Order.CustomerData.LastName)" />
     </div>
 </div>
 
 <div class="form-field">
     <label>Telefon:</label>
     <div>
-        <InputText @bind-Value="CustomerData.PhoneNumber" />
-        <ValidationMessage For="@(() => CustomerData.PhoneNumber)" />
+        <InputText @bind-Value="Order.CustomerData.PhoneNumber" />
+        <ValidationMessage For="@(() => Order.CustomerData.PhoneNumber)" />
     </div>
 </div>
 
 <div class="form-field">
     <label>Email:</label>
     <div>
-        <InputText @bind-Value="CustomerData.EmailAddress" />
-        <ValidationMessage For="@(() => CustomerData.EmailAddress)" />
+        <InputText @bind-Value="Order.CustomerData.EmailAddress" />
+        <ValidationMessage For="@(() => Order.CustomerData.EmailAddress)" />
     </div>
 </div>
 
 <div class="form-field">
     <label>Ulica:</label>
     <div>
-        <InputText @bind-Value="CustomerData.Address.Street" />
-        <ValidationMessage For="@(() => CustomerData.Address.Street)" />
+        <InputText @bind-Value="Order.CustomerData.Address.Street" />
+        <ValidationMessage For="@(() => Order.CustomerData.Address.Street)" />
     </div>
 </div>
 
 <div class="form-field">
     <label>Miasto:</label>
     <div>
-        <InputText @bind-Value="CustomerData.Address.City" />
-        <ValidationMessage For="@(() => CustomerData.Address.City)" />
+        <InputText @bind-Value="Order.CustomerData.Address.City" />
+        <ValidationMessage For="@(() => Order.CustomerData.Address.City)" />
     </div>
 </div>
 
 <div class="form-field">
     <label>Kod pocztowy:</label>
     <div>
-        <InputText @bind-Value="CustomerData.Address.PostalCode" />
-        <ValidationMessage For="@(() => CustomerData.Address.PostalCode)" />
+        <InputText @bind-Value="Order.CustomerData.Address.PostalCode" />
+        <ValidationMessage For="@(() => Order.CustomerData.Address.PostalCode)" />
     </div>
 </div>
 
+<div class="form-field">
+    <label>Rodzaj dostawy:</label>
+    <div>
+        <InputSelect @bind-Value=Order.DeliveryType>
+            <option>(wybierz)</option>
+            <option value="PICKUP">Odbiór własny</option>
+            <option value="COURIER_DELIVERY">Dostawa</option>
+        </InputSelect>
+        <ValidationMessage For="@(() => Order.DeliveryType)" />
+    </div>
+</div>
+
+<DeliveryPointsMap ShowMap=@MapToBeShown></DeliveryPointsMap>
+
+
 @code {
-    [Parameter] public CustomerData CustomerData { get; set; }
+    [Parameter] public Order Order { get; set; }
+
+    public bool MapToBeShown => (Order.DeliveryType is { } && Order.DeliveryType == "PICKUP");
 }

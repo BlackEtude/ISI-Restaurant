@@ -4,27 +4,27 @@
 @inject ISI_Restaurant.BlazorApp.Data.OrderService OrderService
 @inject OrderState OrderState
 
-<div class="main">
-    <EditForm Model="OrderState.Order.CustomerData" OnValidSubmit="PlaceOrder">
-        <div class="checkout-cols">
-            <div class="checkout-order-details">
-                <h4>Potwierdź zamówienie</h4>
-                <OrderReview Order="OrderState.Order" />
+    <div class="main">
+        <EditForm Model="OrderState.Order" OnValidSubmit="PlaceOrder">
+            <div class="checkout-cols">
+                <div class="checkout-order-details">
+                    <h4>Potwierdź zamówienie</h4>
+                    <OrderReview Order="OrderState.Order" />
+                </div>
+
+                <div class="checkout-delivery-address">
+                    <h4>Dane do dostawy</h4>
+                    <AddressEditor Order="OrderState.Order" />
+                </div>
             </div>
 
-            <div class="checkout-delivery-address">
-                <h4>Dane do dostawy</h4>
-                <AddressEditor CustomerData="OrderState.Order.CustomerData" />
-            </div>
-        </div>
+            <button type="submit" class="checkout-button btn btn-warning" disabled="@isSubmitting">
+                Złóż zamówienie
+            </button>
 
-        <button type="submit" class="checkout-button btn btn-warning" disabled="@isSubmitting">
-            Złóż zamówienie
-        </button>
-
-        <DataAnnotationsValidator />
-    </EditForm>
-</div>
+            <DataAnnotationsValidator />
+        </EditForm>
+    </div>
 
 @code {
     bool isSubmitting;

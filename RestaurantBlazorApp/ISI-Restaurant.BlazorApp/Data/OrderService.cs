@@ -1,9 +1,7 @@
 ﻿using ISI_Restaurant.RestApiClient;
 using ISI_Restaurant.Shared.Models;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ISI_Restaurant.BlazorApp.Data
@@ -36,6 +34,13 @@ namespace ISI_Restaurant.BlazorApp.Data
         public async Task PlaceNewOrder(Order order)
         {
             LastPlacedOrder = await apiClient.SendNewOrder(order);
+        }
+
+        public async Task<IEnumerable<DeliveryPoint>> GetDeliveryPoints()
+        {
+            var deliveryPoints = (await apiClient.GetDeliveryPoints()).Result;
+            logger.LogDebug("Deliver points loaded.");
+            return deliveryPoints;
         }
     }
 }

@@ -82,6 +82,9 @@ namespace ISI_Restaurant.RestApiClient
         public async Task<RequestResult<Order>> GetOrder(int id)
             => await Get<Order>(relativeUri: Path.Combine("order", id.ToString()));
 
+        public async Task<RequestResult<IEnumerable<DeliveryPoint>>> GetDeliveryPoints()
+            => await Get<IEnumerable<DeliveryPoint>>(relativeUri: "deliverypoint");
+
         public async Task<int> SendNewOrder(Order order)
         {
             var uri = new Uri(baseUri, "order");
@@ -117,6 +120,5 @@ namespace ISI_Restaurant.RestApiClient
                 return false;
             }
         }
-
     }
 }
