@@ -28,5 +28,9 @@ public class CustomerData implements Serializable {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "address")
     private Address address;
+
+    @Column(name = "ipAddress")
+    private String ipAddress;
 }

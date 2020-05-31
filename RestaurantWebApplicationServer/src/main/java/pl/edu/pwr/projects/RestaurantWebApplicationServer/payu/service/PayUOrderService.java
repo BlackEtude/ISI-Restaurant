@@ -2,11 +2,22 @@ package pl.edu.pwr.projects.RestaurantWebApplicationServer.payu.service;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
+import pl.edu.pwr.projects.RestaurantWebApplicationServer.entity.*;
+import pl.edu.pwr.projects.RestaurantWebApplicationServer.payu.configuration.PayUConfiguration;
+import pl.edu.pwr.projects.RestaurantWebApplicationServer.payu.payload.BuyerPayload;
 import pl.edu.pwr.projects.RestaurantWebApplicationServer.payu.payload.OrderPayload;
 import pl.edu.pwr.projects.RestaurantWebApplicationServer.payu.payload.OrderResult;
+import pl.edu.pwr.projects.RestaurantWebApplicationServer.payu.payload.ProductPayload;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.UUID;
 
 @Service
 public class PayUOrderService {
@@ -14,10 +25,70 @@ public class PayUOrderService {
 
     private PayUAuthService payUAuthService;
 
-    public PayUOrderService(RestTemplate restTemplate, PayUAuthService payUAuthService) {
+    private PayUConfiguration payUConfiguration;
+
+    public PayUOrderService(RestTemplate restTemplate, PayUAuthService payUAuthService,
+                            PayUConfiguration payUConfiguration) {
         this.restTemplate = restTemplate;
         this.payUAuthService = payUAuthService;
+        this.payUConfiguration = payUConfiguration;
     }
+
+    public ResponseEntity createPayUOrder(Order order) {
+        try {
+        ArrayList<ProductPayload> products = new ArrayList();
+
+        for (OrderItem orderItem : order.getOrderItems()) {
+            double price = orderItem.getProduct().getPrice();
+
+            for (Topping topping : orderItem.getToppings()) {
+                price += topping.getPrice();
+            }
+
+            ProductPayload product = ProductPayload.builder()
+                    .name(orderItem.getProduct().getName())
+                    .quantity(new BigInteger(String.valueOf(1)))
+                    .unitPrice(BigDecimal.valueOf(price).toBigInteger())
+                    .build();
+            products.add(product);
+        }
+
+            CustomerData customerData = order.getCustomerData();
+            BuyerPayload buyer = BuyerPayload.builder()
+                    .email(customerData.getEmailAddress())
+                    .phone(customerData.getPhoneNumber())
+                    .firstName(customerData.getFirstName())
+                    .lastName(customerData.getLastName())
+                    .build();
+
+            String url = "http://localhost:8000/order/" + order.getId();
+
+            OrderPayload payUOrder = OrderPayload.builder()
+                    .notifyUrl(url)
+                    .customerIp(customerData.getIpAddress())
+                    .merchantPosId(Integer.valueOf(payUConfiguration.getClientId()))
+                    .description("Hotspot Pizza")
+                    .currencyCode("PLN")
+                    .totalAmount(new BigInteger(String.valueOf(order.getTotalPrice())))
+                    .buyerPayload(buyer)
+                    .products(products)
+                    .build();
+
+            OrderResult orderResult = create(payUOrder);
+
+            CreatedOrderResponse createdOrderResponse = CreatedOrderResponse.builder()
+                    .order(order)
+                    .orderResult(orderResult)
+                    .notifyUrl(url)
+                    .build();
+
+            return new ResponseEntity(createdOrderResponse, HttpStatus.CREATED);
+
+        } catch (RestClientResponseException r) {
+            return new ResponseEntity(r.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
     public OrderResult create(OrderPayload order) {
         payUAuthService.authorize();

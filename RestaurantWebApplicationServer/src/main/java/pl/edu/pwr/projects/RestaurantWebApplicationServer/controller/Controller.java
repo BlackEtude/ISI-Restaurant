@@ -1,10 +1,9 @@
 package pl.edu.pwr.projects.RestaurantWebApplicationServer.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.edu.pwr.projects.RestaurantWebApplicationServer.entity.DeliveryPoint;
-import pl.edu.pwr.projects.RestaurantWebApplicationServer.entity.Order;
-import pl.edu.pwr.projects.RestaurantWebApplicationServer.entity.Product;
-import pl.edu.pwr.projects.RestaurantWebApplicationServer.entity.Topping;
+import pl.edu.pwr.projects.RestaurantWebApplicationServer.entity.*;
+import pl.edu.pwr.projects.RestaurantWebApplicationServer.payu.service.PayUOrderService;
 import pl.edu.pwr.projects.RestaurantWebApplicationServer.service.DeliveryPointService;
 import pl.edu.pwr.projects.RestaurantWebApplicationServer.service.OrderService;
 import pl.edu.pwr.projects.RestaurantWebApplicationServer.service.ProductService;
@@ -19,13 +18,16 @@ public class Controller {
     private OrderService orderService;
     private ProductService productService;
     private ToppingService toppingService;
+    private PayUOrderService payUOrderService;
 
     public Controller(DeliveryPointService deliveryPointService, OrderService orderService,
-                      ProductService productService, ToppingService toppingService) {
+                      ProductService productService, ToppingService toppingService,
+                      PayUOrderService payUOrderService) {
         this.deliveryPointService = deliveryPointService;
         this.orderService = orderService;
         this.productService = productService;
         this.toppingService = toppingService;
+        this.payUOrderService = payUOrderService;
     }
 
     @GetMapping("/product")
@@ -39,8 +41,9 @@ public class Controller {
     }
 
     @PostMapping("/order")
-    Order createNewOrder(@RequestBody Order order) {
-        return orderService.createNewOrder(order);
+    ResponseEntity createNewOrder(@RequestBody Order order) {
+        Order newOrder = orderService.createNewOrder(order);
+        return payUOrderService.createPayUOrder(newOrder);
     }
 
     @GetMapping("/order/{id}")
