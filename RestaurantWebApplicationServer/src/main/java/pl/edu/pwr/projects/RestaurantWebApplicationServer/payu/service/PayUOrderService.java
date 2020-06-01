@@ -77,9 +77,10 @@ public class PayUOrderService {
             OrderResult orderResult = create(payUOrder);
 
             CreatedOrderResponse createdOrderResponse = CreatedOrderResponse.builder()
-                    .order(order)
-                    .orderResult(orderResult)
+                    .orderId(order.getId())
                     .notifyUrl(url)
+                    .payUOrderId(orderResult.getOrderId())
+                    .redirectUri(orderResult.getRedirectUri())
                     .build();
 
             return createdOrderResponse;
