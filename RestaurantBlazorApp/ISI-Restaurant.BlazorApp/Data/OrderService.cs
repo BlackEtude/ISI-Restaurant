@@ -40,7 +40,7 @@ namespace ISI_Restaurant.BlazorApp.Data
             order.CustomerData.IpAddress = GetPublicIP();
 
             var orderResponse = await apiClient.SendNewOrder(order);
-            LastPlacedOrder = (int)orderResponse.Id;
+            LastPlacedOrder = (int)orderResponse.Order.Id;
         }
 
         public async Task<IEnumerable<DeliveryPoint>> GetDeliveryPoints()
