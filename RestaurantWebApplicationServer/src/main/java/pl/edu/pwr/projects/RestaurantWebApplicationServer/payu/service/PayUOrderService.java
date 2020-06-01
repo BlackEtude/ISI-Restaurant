@@ -48,7 +48,7 @@ public class PayUOrderService {
             ProductPayload product = ProductPayload.builder()
                     .name(orderItem.getProduct().getName())
                     .quantity(new BigInteger(String.valueOf(1)))
-                    .unitPrice(BigDecimal.valueOf(price).toBigInteger())
+                    .unitPrice(BigDecimal.valueOf(price * 100).toBigInteger())
                     .build();
             products.add(product);
         }
@@ -69,7 +69,7 @@ public class PayUOrderService {
                     .merchantPosId(Integer.valueOf(payUConfiguration.getClientId()))
                     .description("Hotspot Pizza")
                     .currencyCode("PLN")
-                    .totalAmount(new BigInteger(String.valueOf(order.getTotalPrice())))
+                    .totalAmount(BigDecimal.valueOf(order.getTotalPrice() * 100).toBigInteger())
                     .buyerPayload(buyer)
                     .products(products)
                     .build();
