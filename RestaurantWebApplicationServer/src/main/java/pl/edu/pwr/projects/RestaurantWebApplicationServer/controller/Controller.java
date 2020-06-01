@@ -41,7 +41,7 @@ public class Controller {
     }
 
     @PostMapping("/order")
-    ResponseEntity createNewOrder(@RequestBody Order order) {
+    CreatedOrderResponse createNewOrder(@RequestBody Order order) {
         Order newOrder = orderService.createNewOrder(order);
         return payUOrderService.createPayUOrder(newOrder);
     }

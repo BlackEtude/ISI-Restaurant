@@ -34,7 +34,7 @@ public class PayUOrderService {
         this.payUConfiguration = payUConfiguration;
     }
 
-    public ResponseEntity createPayUOrder(Order order) {
+    public CreatedOrderResponse createPayUOrder(Order order) {
         try {
         ArrayList<ProductPayload> products = new ArrayList();
 
@@ -82,10 +82,11 @@ public class PayUOrderService {
                     .notifyUrl(url)
                     .build();
 
-            return new ResponseEntity(createdOrderResponse, HttpStatus.CREATED);
+            return createdOrderResponse;
 
         } catch (RestClientResponseException r) {
-            return new ResponseEntity(r.getMessage(), HttpStatus.BAD_REQUEST);
+//            return new ResponseEntity(r.getMessage(), HttpStatus.BAD_REQUEST);
+            return null;
         }
     }
 
