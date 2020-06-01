@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System.Net;
 using System.IO;
+using System.Linq;
 
 namespace ISI_Restaurant.BlazorApp.Data
 {
@@ -38,6 +39,8 @@ namespace ISI_Restaurant.BlazorApp.Data
         {
             // amend with client IP Address
             order.CustomerData.IpAddress = GetPublicIP();
+            order.Items.ForEach(i => i.ProductSize = "SMALL");
+            order.TotalPrice = (double)order.Items.Sum(i => i.GetTotalPrice());
 
             var orderResponse = await apiClient.SendNewOrder(order);
             LastPlacedOrder = (int)orderResponse.Order.Id;

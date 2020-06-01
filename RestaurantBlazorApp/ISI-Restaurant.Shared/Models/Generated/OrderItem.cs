@@ -11,7 +11,7 @@ namespace ISI_Restaurant.Shared.Models
         [JsonProperty("product")]
         public Product Product { get; set; }
 
-        [JsonProperty("size")]
+        [JsonIgnore]
         public int Size { get; set; }
 
         [JsonProperty("productSize")]
