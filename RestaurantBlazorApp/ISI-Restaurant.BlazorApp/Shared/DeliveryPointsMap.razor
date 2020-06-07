@@ -16,7 +16,7 @@
 
     private IEnumerable<DeliveryPoint> deliveryPoints;
     private static string baseUrl => "https://maps.googleapis.com/maps/api/staticmap?size=600x300&maptype=roadmap";
-    private static string apiKey => "AIzaSyDedvqQg5xAuvbsAahKkNNkkDsyqMQFuyo";
+    private string apiKey => OrderService.GoogleMapsApiKey;
 
     protected override async Task OnInitializedAsync()
     {

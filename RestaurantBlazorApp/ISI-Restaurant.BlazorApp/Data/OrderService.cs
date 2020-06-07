@@ -3,7 +3,6 @@ using ISI_Restaurant.Shared.Models;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using System.Net;
 using System.IO;
 using System.Linq;
@@ -15,12 +14,14 @@ namespace ISI_Restaurant.BlazorApp.Data
         private readonly ILogger<OrderService> logger;
         private readonly IApiClient apiClient;
 
+        public string GoogleMapsApiKey { get; }
         public CreatedOrderResponse LastPlacedOrder { get; private set; } = null;
 
-        public OrderService(ILogger<OrderService> logger, IApiClient apiClient)
+        public OrderService(ILogger<OrderService> logger, IApiClient apiClient, ApiClientConfiguration configuration)
         {
             this.logger = logger;
             this.apiClient = apiClient;
+            GoogleMapsApiKey = configuration.GoogleMapsApiKey;
         }
 
         public async Task<Order> LoadOrder()
