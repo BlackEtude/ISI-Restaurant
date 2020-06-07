@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ISI_Restaurant.Shared.Models
@@ -12,10 +13,16 @@ namespace ISI_Restaurant.Shared.Models
             DeliveryPoint = new DeliveryPoint();
         }
 
-        public decimal GetCalculatedPrice() => Items.Sum(p => p.GetTotalPrice());
+        public decimal GetCalculatedPrice() 
+            => Items.Sum(p => p.GetTotalPrice());
 
-        public string GetFormattedCalculatedPrice() => GetCalculatedPrice().ToString("0.00");
+        public string GetFormattedCalculatedPrice() 
+            => GetCalculatedPrice().ToString("0.00");
 
-        public string GetFormattedTotalPrice() => TotalPrice.ToString("0.00");
+        public string GetFormattedTotalPrice() 
+            => TotalPrice.ToString("0.00");
+
+        public string GetFormattedDateTime() 
+            => string.Concat(DateTime.Parse(OrderDateTime).ToShortDateString(), " ", DateTime.Parse(OrderDateTime).ToShortTimeString());
     }
 }

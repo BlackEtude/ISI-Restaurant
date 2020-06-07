@@ -15,7 +15,7 @@
         <div class="track-order">
             <div class="track-order-title">
                 <h2>
-                    Zamówienie złożone @DateTime.Now.ToShortDateString()
+                    Zamówienie złożone @order.GetFormattedDateTime()
                 </h2>
                 <p class="ml-auto mb-0">
                     Status: <strong>@order.Status</strong>
