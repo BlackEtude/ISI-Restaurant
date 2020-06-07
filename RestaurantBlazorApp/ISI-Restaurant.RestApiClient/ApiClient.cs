@@ -66,9 +66,9 @@ namespace ISI_Restaurant.RestApiClient
                 logger.LogError($"Request timed out for uri: {relativeUri}.");
                 return new RequestResult<T>(Status.Waiting);
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException ex)
             {
-                logger.LogWarning($"Request failed for uri: {relativeUri}.");
+                logger.LogWarning($"Request failed for uri: {relativeUri} with exception: {ex}.");
                 return new RequestResult<T>(Status.Error);
             }
         }
@@ -97,7 +97,11 @@ namespace ISI_Restaurant.RestApiClient
             var responseStream = await httpResponse.Content.ReadAsStreamAsync();
             var stringData = (await httpResponse.Content.ReadAsStringAsync());
 
-            TryDeserialize<CreatedOrderResponse>(responseStream, out var orderReceived);
+            if (!TryDeserialize<CreatedOrderResponse>(responseStream, out var orderReceived))
+            {
+                logger.LogError($"API returned invalid content format.");
+                return default;
+            }
             return orderReceived;
         }
 
