@@ -15,7 +15,7 @@ namespace ISI_Restaurant.BlazorApp.Data
         private readonly ILogger<OrderService> logger;
         private readonly IApiClient apiClient;
 
-        public int? LastPlacedOrder { get; private set; } = null;
+        public CreatedOrderResponse LastPlacedOrder { get; private set; } = null;
 
         public OrderService(ILogger<OrderService> logger, IApiClient apiClient)
         {
@@ -30,7 +30,7 @@ namespace ISI_Restaurant.BlazorApp.Data
                 return null;
             }
 
-            var order = (await apiClient.GetOrder(LastPlacedOrder.Value)).Result;
+            var order = (await apiClient.GetOrder((int)LastPlacedOrder.OrderId)).Result;
             logger.LogDebug("Order loaded.");
             return order;
         }
@@ -43,7 +43,7 @@ namespace ISI_Restaurant.BlazorApp.Data
             order.TotalPrice = (double)order.Items.Sum(i => i.GetTotalPrice());
 
             var orderResponse = await apiClient.SendNewOrder(order);
-            LastPlacedOrder = (int)orderResponse.Order.Id;
+            LastPlacedOrder = orderResponse;
         }
 
         public async Task<IEnumerable<DeliveryPoint>> GetDeliveryPoints()
