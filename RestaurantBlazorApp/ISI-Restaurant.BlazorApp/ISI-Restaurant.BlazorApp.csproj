@@ -2,6 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <LangVersion>8.0</LangVersion>
     <RootNamespace>ISI_Restaurant.BlazorApp</RootNamespace>
     <UserSecretsId>d61d2d1f-58b1-46c5-89ca-3198429f3bce</UserSecretsId>
   </PropertyGroup>
