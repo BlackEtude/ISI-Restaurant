@@ -91,11 +91,8 @@ namespace ISI_Restaurant.RestApiClient
 
             await SetBearer();
 
-            order.DeliveryPoint.Id = 1;         // temporarly fix the delivery point data
-
             var httpResponse = await httpClient.PostAsJsonAsync(uri, order);
             var responseStream = await httpResponse.Content.ReadAsStreamAsync();
-            var stringData = (await httpResponse.Content.ReadAsStringAsync());
 
             if (!TryDeserialize<CreatedOrderResponse>(responseStream, out var orderReceived))
             {

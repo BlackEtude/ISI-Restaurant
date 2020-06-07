@@ -273,6 +273,16 @@ form {
     padding: 0.4rem 1.2rem;
 }
 
+.map-image-container {
+    text-align: center;
+}
+
+.map-image {
+    width: 600px;
+    height: 300px;
+    display: inline-block;
+}
+
 .cart-item {
     background-color: #333333;
     padding: 0.8rem 1.2rem;

@@ -19,6 +19,7 @@ namespace ISI_Restaurant.Shared.Models
         public double TotalPrice { get; set; }
 
         [JsonProperty("deliveryType")]
+        [Required]
         public string DeliveryType { get; set; }
 
         [JsonProperty("status")]
