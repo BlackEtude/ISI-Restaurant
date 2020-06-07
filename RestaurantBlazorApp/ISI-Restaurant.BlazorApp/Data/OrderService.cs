@@ -37,9 +37,9 @@ namespace ISI_Restaurant.BlazorApp.Data
 
         public async Task PlaceNewOrder(Order order)
         {
-            // amend with client IP Address
+            // prepare final details
             order.CustomerData.IpAddress = GetPublicIP();
-            order.Items.ForEach(i => i.ProductSize = "SMALL");
+            order.Items.ForEach(i => i.ProductSize = i.MapProductSize());
             order.TotalPrice = (double)order.Items.Sum(i => i.GetTotalPrice());
 
             var orderResponse = await apiClient.SendNewOrder(order);

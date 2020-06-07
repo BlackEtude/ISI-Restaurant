@@ -19,5 +19,15 @@ namespace ISI_Restaurant.Shared.Models
 
         [JsonProperty("toppings")]
         public List<Topping> Toppings { get; set; }
+
+        public string MapProductSize()
+        {
+            return Size switch
+            {
+                Product.MinimumSize => "SMALL",
+                Product.MaximumSize => "BIG",
+                _ => "MEDIUM"  // default
+            };
+        }
     }
 }
