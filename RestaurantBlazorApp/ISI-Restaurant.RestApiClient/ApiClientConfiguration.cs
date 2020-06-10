@@ -35,5 +35,6 @@ namespace ISI_Restaurant.RestApiClient
         public string AuthDomain { get; set; }
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
+        public string GoogleMapsApiKey { get; set; }
     }
 }

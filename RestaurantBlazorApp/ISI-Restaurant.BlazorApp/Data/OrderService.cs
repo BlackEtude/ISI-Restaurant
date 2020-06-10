@@ -3,6 +3,9 @@ using ISI_Restaurant.Shared.Models;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Net;
+using System.IO;
+using System.Linq;
 
 namespace ISI_Restaurant.BlazorApp.Data
 {
@@ -11,12 +14,14 @@ namespace ISI_Restaurant.BlazorApp.Data
         private readonly ILogger<OrderService> logger;
         private readonly IApiClient apiClient;
 
-        public int? LastPlacedOrder { get; private set; } = null;
+        public string GoogleMapsApiKey { get; }
+        public CreatedOrderResponse LastPlacedOrder { get; private set; } = null;
 
-        public OrderService(ILogger<OrderService> logger, IApiClient apiClient)
+        public OrderService(ILogger<OrderService> logger, IApiClient apiClient, ApiClientConfiguration configuration)
         {
             this.logger = logger;
             this.apiClient = apiClient;
+            GoogleMapsApiKey = configuration.GoogleMapsApiKey;
         }
 
         public async Task<Order> LoadOrder()
@@ -26,14 +31,20 @@ namespace ISI_Restaurant.BlazorApp.Data
                 return null;
             }
 
-            var order = (await apiClient.GetOrder(LastPlacedOrder.Value)).Result;
+            var order = (await apiClient.GetOrder((int)LastPlacedOrder.OrderId)).Result;
             logger.LogDebug("Order loaded.");
             return order;
         }
 
         public async Task PlaceNewOrder(Order order)
         {
-            LastPlacedOrder = await apiClient.SendNewOrder(order);
+            // prepare final details
+            order.CustomerData.IpAddress = GetPublicIP();
+            order.Items.ForEach(i => i.ProductSize = i.MapProductSize());
+            order.TotalPrice = (double)order.Items.Sum(i => i.GetTotalPrice());
+
+            var orderResponse = await apiClient.SendNewOrder(order);
+            LastPlacedOrder = orderResponse;
         }
 
         public async Task<IEnumerable<DeliveryPoint>> GetDeliveryPoints()
@@ -41,6 +52,18 @@ namespace ISI_Restaurant.BlazorApp.Data
             var deliveryPoints = (await apiClient.GetDeliveryPoints()).Result;
             logger.LogDebug("Deliver points loaded.");
             return deliveryPoints;
+        }
+
+        private string GetPublicIP()
+        {
+            string myPublicIp = "";
+            WebRequest request = WebRequest.Create("https://api.ipify.org/");
+            using (WebResponse response = request.GetResponse())
+            using (StreamReader stream = new StreamReader(response.GetResponseStream()))
+            {
+                myPublicIp = stream.ReadToEnd();
+            }
+            return myPublicIp;
         }
     }
 }

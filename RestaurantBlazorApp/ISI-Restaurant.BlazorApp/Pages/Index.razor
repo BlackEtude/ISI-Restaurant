@@ -37,7 +37,9 @@ else
 
                 @foreach (var pizza in Order.Items)
                 {
-                    <ShoppingCart Pizza="pizza" OnRemoved="@(() => OrderState.RemoveConfiguredPizza(pizza))" />
+                    <ShoppingCart Pizza="pizza" 
+                                  OnProductRemoved="@(() => OrderState.RemoveConfiguredPizza(pizza))" 
+                                  OnToppingRemoved="@((topping) => OrderState.RemovedConfiguredPizzaTopping(pizza, topping))" />
                 }
             </div>
         }

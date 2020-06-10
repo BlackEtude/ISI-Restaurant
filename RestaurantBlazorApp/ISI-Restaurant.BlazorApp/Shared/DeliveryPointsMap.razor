@@ -3,24 +3,58 @@
 
 @inject OrderService OrderService
 
-<div id="map-image">
+<div id="deliverypoint-chooser">
     @if (ShowMap)
     {
-        <img src="@BuildMapUrl()" alt="Map Alternate Text" />
+        <div class="map-image-container">
+            <div class="map-image">
+                <img src="@BuildMapUrl()" alt="Map Alternate Text" />
+            </div>
+        </div>
+
+        <div class="form-field">
+            <label>Punkt odbioru:</label>
+            <div>
+                <InputSelect @bind-Value=DeliveryPointId>
+                    <option>(wybierz)</option>
+                    @for (var i = 0; i < deliveryPoints.Count; i++)
+                    {
+                        <option value=@(deliveryPoints[i].Id.ToString())>@i: @deliveryPoints[i].GetFormattedDetails()</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => Order.DeliveryPoint)" />
+            </div>
+        </div>
     }
 </div>
 
 
 @code {
     [Parameter] public bool ShowMap { get; set; }
+    [Parameter] public Order Order { get; set; }
 
-    private IEnumerable<DeliveryPoint> deliveryPoints;
+    private List<DeliveryPoint> deliveryPoints;
     private static string baseUrl => "https://maps.googleapis.com/maps/api/staticmap?size=600x300&maptype=roadmap";
-    private static string apiKey => "AIzaSyDedvqQg5xAuvbsAahKkNNkkDsyqMQFuyo";
+    private string apiKey => OrderService.GoogleMapsApiKey;
+
+    private string deliveryPointId;
+    private string DeliveryPointId
+    {
+        get
+        {
+            return deliveryPointId;
+        }
+        set
+        {
+            deliveryPointId = value;
+            var correctChoice = long.TryParse(deliveryPointId, out long deliveryPoint);
+            Order.DeliveryPoint.Id = correctChoice ? deliveryPoint : 0;
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
-        deliveryPoints = await OrderService.GetDeliveryPoints();
+        deliveryPoints = (await OrderService.GetDeliveryPoints()).ToList();
     }
 
     private string BuildMapUrl()

@@ -1,4 +1,5 @@
 ﻿using ISI_Restaurant.Shared.Models;
+using System.Linq;
 
 namespace ISI_Restaurant.BlazorApp
 {
@@ -33,6 +34,12 @@ namespace ISI_Restaurant.BlazorApp
         public void RemoveConfiguredPizza(OrderItem pizza)
         {
             Order.Items.Remove(pizza);
+        }
+
+        public void RemovedConfiguredPizzaTopping(OrderItem pizza, Topping topping)
+        {
+            var pizzaIndex = Order.Items.IndexOf(pizza);
+            Order.Items.ElementAt(pizzaIndex).Toppings.RemoveAll(tp => tp == topping);
         }
 
         public void ResetOrder()

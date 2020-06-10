@@ -16,8 +16,5 @@ namespace ISI_Restaurant.Shared.Models
         [JsonProperty("postalCode")]
         [Required]
         public string PostalCode { get; set; }
-
-        [JsonProperty("country")]
-        public string Country { get; set; }
     }
 }

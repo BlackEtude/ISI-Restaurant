@@ -23,5 +23,8 @@ namespace ISI_Restaurant.Shared.Models
 
         [JsonProperty("address")]
         public Address Address { get; set; }
+
+        [JsonProperty("ipAddress")]
+        public string IpAddress { get; set; }
     }
 }

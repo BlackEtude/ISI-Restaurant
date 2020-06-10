@@ -66,9 +66,9 @@ namespace ISI_Restaurant.RestApiClient
                 logger.LogError($"Request timed out for uri: {relativeUri}.");
                 return new RequestResult<T>(Status.Waiting);
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException ex)
             {
-                logger.LogWarning($"Request failed for uri: {relativeUri}.");
+                logger.LogWarning($"Request failed for uri: {relativeUri} with exception: {ex}.");
                 return new RequestResult<T>(Status.Error);
             }
         }
@@ -85,20 +85,21 @@ namespace ISI_Restaurant.RestApiClient
         public async Task<RequestResult<IEnumerable<DeliveryPoint>>> GetDeliveryPoints()
             => await Get<IEnumerable<DeliveryPoint>>(relativeUri: "deliverypoint");
 
-        public async Task<int> SendNewOrder(Order order)
+        public async Task<CreatedOrderResponse> SendNewOrder(Order order)
         {
             var uri = new Uri(baseUri, "order");
 
             await SetBearer();
 
-            order.DeliveryPoint.Id = 1;         // temporarly fix the delivery point data
-
             var httpResponse = await httpClient.PostAsJsonAsync(uri, order);
             var responseStream = await httpResponse.Content.ReadAsStreamAsync();
-            //var newOrderId = await response.Content.ReadAsStringAsync();
-            TryDeserialize<Order>(responseStream, out var orderReceived);
 
-            return (int)orderReceived.Id;
+            if (!TryDeserialize<CreatedOrderResponse>(responseStream, out var orderReceived))
+            {
+                logger.LogError($"API returned invalid content format.");
+                return default;
+            }
+            return orderReceived;
         }
 
         public static bool TryDeserialize<T>(Stream stream, out T obj)
